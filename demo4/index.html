@@ -10,9 +10,14 @@
 <button id="sendBtn">发送</button>
 <script>
     var websocket = new WebSocket("ws://localhost:3000/");
-    function showMesssge(str) {
+    function showMesssge(str, type) {
         var div = document.createElement('div');
         div.innerHTML = str
+        if (type === 'enter') {
+            div.style.color = 'blue'
+        } else if (type === 'leave') {
+            div.style.color = 'red'
+        }
         document.body.appendChild(div)
     }
     websocket.onopen = function () {
@@ -28,8 +33,8 @@
         console.log("websocket close")
     }
     websocket.onmessage = function (e) {
-        console.log(e.data)
-        showMesssge(e.data)
+        var mes = JSON.parse(e.data);
+        showMesssge(mes.data, mes.type)
     }
 </script>
 </body>
